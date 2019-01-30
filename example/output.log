@@ -1,0 +1,6 @@
+2019-01-30T10:30:17.490Z VERBOSE root listening {"host":"localhost","port":3000}
+2019-01-30T10:30:17.494Z INFO auth.controller hi {"from":"foo"}
+2019-01-30T10:30:17.494Z VERBOSE auth.controller {"some":"test"}
+2019-01-30T10:30:17.495Z WARN auth.controller Invalid userid
+2019-01-30T10:30:17.496Z ERROR auth.controller Error reading file
+2019-01-30T10:30:17.496Z DEBUG auth.controller config {"my":"var"}

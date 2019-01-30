@@ -1,100 +1,92 @@
-joi-env-parse
-============
+# winston-like-debug
 
-Validates and formats `process.env` using [Joi](https://github.com/hapijs/joi) schemas. Recommended using this library along [dotenv](https://github.com/motdotla/dotenv). 
+Format logs with [Winston](https://github.com/winstonjs/winston) like you do with [Debug](https://github.com/visionmedia/debug)
 
-* All object keys are **camel-cased**.
-* Every key not defined in the schema are **discarded**
-* Supports nested objects using `__` as separator
-* Throws joi `ValidationError` if parse attempt fails
-
-### Usage
-```bash
-yarn add joi-env-parse
-npm install joi-env-parse
-```
-
+![sample](./sample.png)
 
 ```js
-const { parse } = require('joi-env-parse')
+const log = require('./logger')('my.controller')
 
-const config = parse( joi => ({
-  LISTEN_PORT: joi.number().required(),
-  COOKIE_SECRET: joi.string().required()
-}))
-
-// { 
-//   listenPort: 3000, 
-//   cookieSecret: 'mysecret' 
-// }
-
+log.info('hi', { from: 'foo' })
+log.verbose({ some: 'test' })
+log.warn('Invalid userid')
+log.silly('Hi %s', 'Bob', { greetings: true }, { when: Date.now() })
+log.error('Error reading file')
+log.debug('config', { my: 'var' })
 ```
 
 
-### Examples
+
+## Usage
 
 
-#### Possible and default values 
-
-```bash
-NODE_ENV=development
-```
+#### logger.js
 
 ```js
-parse( joi => ({
-  NODE_ENV: joi.string().required().valid('development', 'production'),
-  PORT: joi.number().default(5000)
-}))
+const winston = require('winston')
+const { likeDebug, withNamespace } = require('winston-like-debug')
 
-// { 
-//   port: 5000, 
-//   nodeEnv: 'development' 
-// }
+const logger = winston.createLogger({
+  // This is required to be at top level format
+  // See https://github.com/winstonjs/winston/issues/1430
+  format: winston.format.splat(), 
+})
 
+logger.add(
+  new winston.transports.Console({
+    level: 'silly',
+    format: likeDebug(),
+  })
+)
+
+logger.add(
+  new winston.transports.File({
+    level: 'debug',
+    filename: __dirname + '/output.log',
+    format: likeDebug({ colors: false }),
+  })
+)
+
+module.exports = withNamespace(logger)
 ```
+### Using namespaced logger
 
-
-#### Nested properties
-
-```bash
-MONGO_URI=mongodb://localhost
-REDIS__HOST_ADDR=localhost
-REDIS__DB=7
-NESTED__OBJ__FOO__BAR=myvalue
-```
+#### index.js
 
 ```js
-parse( joi => ({
-  MONGO_URI: joi.string().uri().required(),
-  REDIS__HOST_ADDR: joi.string().required(),
-  REDIS__DB: joi.number().required(),
-  NESTED__OBJ__FOO__BAR: joi.number().required()
-}))
+const log = require('./logger')('root')
 
-// { 
-//   mongoUri: 'mongodb://localhost',
-//   redis: { hostAddr: 'localhost', db: 7 }
-//   nested: { obj: { foo: { bar: 'myvalue' } } }
-// }
-
+log.verbose('listening', { host: 'localhost' }, { port: 3000 })
 ```
 
-#### Object and array values
+##### Console output:
+<div style="background:#222; padding: 2px 10px">
+<span style="color:#0A0"><b>V<span style="font-weight:normal"><span style="color:#FFF"> <b><span style="color:#F55">root<span style="color:#FFF"><span style="font-weight:normal;"> listening { host: <span style="color:#0A0">'localhost'<span style="color:#FFF">, port: <span style="color:#A50">3000<span style="color:#FFF"> } <span style="color:#F55">+0ms<span style="color:#FFF">
+</span></span></span></span></span></span></span></span></span></b></span></span></b></span>
+</div>
 
-```bash
-MY_PARAMS={"a":1,"b":"foo"}
-IP_WHITELIST=["192.168.1.1","localhost"]
+##### output.log file content:
 ```
+2010-01-30T10:04:43.824Z VERBOSE root listening {"host":"localhost","port":3000}
+```
+
+### Namespace based on filename
+
+#### auth.controller.js
 
 ```js
-parse( joi => ({
-  MY_PARAMS: joi.object().required(),
-  IP_WHITELIST: joi.array().required()
-}))
+const log = require('./logger')(module)
 
-// { 
-//   myParams: { a: 1, b: 'foo' },
-//   ipWhitelist: [ '192.168.1.1', 'localhost' ]
-// }
+log.warn('login', { userId: 98356190 })
+```
 
+##### Console output:
+<div style="background:#222; padding: 2px 10px">
+<span style="color:#A50"><b>W<span style="font-weight:normal"><span style="color:#FFF"> <b><span style="color:#5F5">auth.controller<span style="color:#FFF"><span style="font-weight:normal"> login { userId: <span style="color:#A50">98356190<span style="color:#FFF"> } <span style="color:#5F5">+0ms<span style="color:#FFF">
+</span></span></span></span></span></span></span></b></span></span></b></span></span></span></span></span></span></span></span></b></span></span></b></span>
+</div>
+
+##### output.log file content:
+```
+2010-01-30T10:08:03.386Z WARN auth.controller login {"userId":98356190}
 ```
