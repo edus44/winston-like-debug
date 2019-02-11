@@ -5,6 +5,7 @@ const { SPLAT, MESSAGE, LEVEL } = require('triple-beam')
 const { basename } = require('path')
 const { LEVELS, getNamespaceColor } = require('./colors')
 const props = ['message', 'namespace', 'level', 'timestamp', 'ms', LEVEL, SPLAT, MESSAGE]
+const safeStringify = require('fast-safe-stringify')
 
 /**
  * Returns a child logger with namespace setted
@@ -27,13 +28,15 @@ function likeDebugWithColors(info) {
   const level = LEVELS[info.level]
   const namespace = chalk.bold.ansi256(color)(info.namespace || 'default')
   let message =
-    typeof info.message === 'string' ? info.message : inspect(info.message, { colors: true })
+    typeof info.message === 'string'
+      ? info.message
+      : inspect(info.message, { colors: true, depth: 10 })
   const ms = chalk.ansi256(color)(info.ms)
 
   // Rest object
   const rest = omit(info, props)
   if (Object.keys(rest).length) {
-    message += ` ${inspect(rest, { colors: true })}`
+    message += ` ${inspect(rest, { colors: true, depth: 10 })}`
   }
 
   return `${level} ${namespace} ${message} ${ms}`
@@ -45,12 +48,12 @@ function likeDebugWithColors(info) {
 function likeDebug(info) {
   const level = info.level.toUpperCase()
   const namespace = info.namespace || 'default'
-  let message = typeof info.message === 'string' ? info.message : JSON.stringify(info.message)
+  let message = typeof info.message === 'string' ? info.message : safeStringify(info.message)
 
   // Rest object
   const rest = omit(info, props)
   if (Object.keys(rest).length) {
-    message += ` ${JSON.stringify(rest)}`
+    message += ` ${safeStringify(rest)}`
   }
 
   // Message join

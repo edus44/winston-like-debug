@@ -1,6 +1,6 @@
 {
   "name": "winston-like-debug",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Format logs with Winston like you do with Debug",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,8 @@
   },
   "homepage": "https://github.com/edus44/winston-like-debug#readme",
   "dependencies": {
-    "chalk": "^2.4.2"
+    "chalk": "^2.4.2",
+    "fast-safe-stringify": "^2.0.6"
   },
   "devDependencies": {
     "jest": "^23.6.0",

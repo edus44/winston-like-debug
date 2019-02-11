@@ -13,7 +13,7 @@ afterEach(() => {
 
 it('should format like debug with colors', () => {
   const res = likeDebug().transform({ level: 'verbose', message: 'db', namespace: 'connected' })
-  expect(res[MESSAGE]).toMatchInlineSnapshot(`"[34m[1mV[22m[39m [1m[91mconnected[39m[22m db [91m+0ms[39m"`)
+  expect(res[MESSAGE]).toMatchInlineSnapshot(`"[34m[1mV[22m[39m [1m[38;5;167mconnected[39m[22m db [38;5;167m+0ms[39m"`)
 })
 
 it('should format like debug with colors and rest object', () => {
@@ -23,7 +23,7 @@ it('should format like debug with colors and rest object', () => {
     namespace: 'connected',
     myKey: 'myValue',
   })
-  expect(res[MESSAGE]).toMatchInlineSnapshot(`"[34m[1mV[22m[39m [1m[91mconnected[39m[22m db { myKey: [32m'myValue'[39m } [91m+0ms[39m"`)
+  expect(res[MESSAGE]).toMatchInlineSnapshot(`"[34m[1mV[22m[39m [1m[38;5;167mconnected[39m[22m db { myKey: [32m'myValue'[39m } [38;5;167m+0ms[39m"`)
 })
 it('should format like debug with colors and message as object', () => {
   const res = likeDebug().transform({
@@ -32,7 +32,7 @@ it('should format like debug with colors and message as object', () => {
     namespace: 'connected',
     other: 'test',
   })
-  expect(res[MESSAGE]).toMatchInlineSnapshot(`"[34m[1mV[22m[39m [1m[91mconnected[39m[22m { foo: [32m'bar'[39m } { other: [32m'test'[39m } [91m+0ms[39m"`)
+  expect(res[MESSAGE]).toMatchInlineSnapshot(`"[34m[1mV[22m[39m [1m[38;5;167mconnected[39m[22m { foo: [32m'bar'[39m } { other: [32m'test'[39m } [38;5;167m+0ms[39m"`)
 })
 
 it('should format like debug without colors', () => {
