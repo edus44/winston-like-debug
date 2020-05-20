@@ -21,4 +21,12 @@ logger.add(
   })
 )
 
+logger.add(
+  new winston.transports.File({
+    level: 'debug',
+    filename: __dirname + '/output-json.log',
+    format: winston.format.json(),
+  })
+)
+
 module.exports = withNamespace(logger)

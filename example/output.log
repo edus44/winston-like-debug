@@ -1,6 +1,6 @@
-2019-01-30T10:30:17.490Z VERBOSE root listening {"host":"localhost","port":3000}
-2019-01-30T10:30:17.494Z INFO auth.controller hi {"from":"foo"}
-2019-01-30T10:30:17.494Z VERBOSE auth.controller {"some":"test"}
-2019-01-30T10:30:17.495Z WARN auth.controller Invalid userid
-2019-01-30T10:30:17.496Z ERROR auth.controller Error reading file
-2019-01-30T10:30:17.496Z DEBUG auth.controller config {"my":"var"}
+2020-05-20T15:08:36.838Z VERBOSE root listening {"host":"localhost","port":3000}
+2020-05-20T15:08:36.839Z INFO auth.controller hi {"from":"foo"}
+2020-05-20T15:08:36.839Z VERBOSE auth.controller {"some":"test"}
+2020-05-20T15:08:36.840Z WARN auth.controller Invalid userid
+2020-05-20T15:08:36.840Z ERROR auth.controller Error reading file
+2020-05-20T15:08:36.841Z DEBUG auth.controller config {"my":"var"}

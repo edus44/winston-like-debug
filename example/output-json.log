@@ -1,0 +1,6 @@
+{"namespace":"root","host":"localhost","level":"verbose","message":"listening","port":3000}
+{"namespace":"auth.controller","from":"foo","level":"info","message":"hi"}
+{"namespace":"auth.controller","message":{"some":"test"},"level":"verbose"}
+{"namespace":"auth.controller","message":"Invalid userid","level":"warn"}
+{"namespace":"auth.controller","message":"Error reading file","level":"error"}
+{"namespace":"auth.controller","my":"var","level":"debug","message":"config"}
