@@ -14,7 +14,7 @@ const safeStringify = require('fast-safe-stringify')
  */
 function withNamespace(logger) {
   return module => {
-    const namespace = module.filename ? basename(module.filename, '.js') : module
+    const namespace = module.filename ? basename(module.filename).replace(/\.[^/.]+$/, "") : module
     return logger.child({ namespace })
   }
 }
